@@ -3,26 +3,57 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 img=cv.imread('pic.jpg')
+
+rgb=cv.cvtColor(img,cv.COLOR_BGR2RGB)
+
 gray=cv.cvtColor(img,cv.COLOR_BGR2GRAY)
 
-blur=cv.GaussianBlur(gray,(5,5),0)
+guassian=cv.GaussianBlur(gray,(11,11),0)
 
-edges=cv.Canny(blur,100,200)
+gx=cv.Sobel(guassian,cv.CV_64F,1,0,3)
+gy=cv.Sobel(guassian,cv.CV_64F,0,1,3)
 
-plt.figure(figsize=(20,20))
-plt.subplot(1,3,1)
-plt.imshow(img)
+magnitude=cv.magnitude(gx,gy)
+
+directions=cv.phase(gx,gy,True)
+
+canny_edges=cv.Canny(gray,100,200)
+
+
+plt.figure(figsize=(30,30))
+plt.subplot(1,7,1)
+plt.imshow(rgb)
 plt.title('Original Image')
 plt.axis('off')
 
-plt.subplot(1,3,2)
-plt.imshow(gray)
-plt.title('Gray Image')
+plt.subplot(1,7,2)
+plt.imshow(gray,cmap='gray')
+plt.title('Gray Scale Image')
 plt.axis('off')
 
-plt.subplot(1,3,3)
-plt.imshow(edges)
-plt.title('Edges Detection Image')
+plt.subplot(1,7,3)
+plt.imshow(gx,cmap='gray')
+plt.title('Horizontal Edges')
+plt.axis('off')
+
+plt.subplot(1,7,4)
+plt.imshow(gy,cmap='gray')
+plt.title('Vertical Edges')
+plt.axis('off')
+
+plt.subplot(1,7,5)
+plt.imshow(magnitude,cmap='gray')
+plt.title('Magnitude')
+plt.axis('off')
+
+plt.subplot(1,7,6)
+plt.imshow(directions,cmap='gray')
+plt.title('Direction of Edges')
+plt.axis('off')
+
+plt.subplot(1,7,7)
+plt.imshow(canny_edges,cmap='gray')
+plt.title('Canny Edges')
 plt.axis('off')
 
 plt.show()
