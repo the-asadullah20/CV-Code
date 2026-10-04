@@ -19,8 +19,11 @@ cdf[0]=hist[0]
 
 for i in range(1,256):
     cdf[i]=hist[i]+cdf[i-1]
-    
-mini=min(cdf)
+
+mini=float('inf')
+for i in cdf:
+    if i != 0:
+        mini=min(i,mini)
 
 total_pixels=gray.shape[0]*gray.shape[1]
 deno=total_pixels-mini
